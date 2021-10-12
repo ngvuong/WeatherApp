@@ -7,10 +7,14 @@ async function fetchWeather(location = "London") {
 
   const baseUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=f2770452bcb842b20425a6d7a6413b9e`;
 
-  const response = await fetch(baseUrl);
-  const weatherData = await response.json();
-  console.log(weatherData);
-  return weatherData;
+  try {
+    const response = await fetch(baseUrl);
+    const weatherData = await response.json();
+    console.log(weatherData);
+    return weatherData;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 // fetchWeather("Santa Rosa, US");
@@ -29,17 +33,23 @@ function parseWeather(data) {
   const display = document.querySelector(".display");
   const search = document.querySelector(".search");
 
-  let city;
-  search.addEventListener("submit", (e) => {
+  search.addEventListener("submit", async (e) => {
     e.preventDefault();
-    city = search.city.value;
-    // displayWeather();
+    const city = search.city.value;
+    setDisplay(await getData(city));
   });
-  const response = await fetchWeather(city);
-  const weatherData = parseWeather(response);
 
-  display.innerHTML = `${weatherData.city}, ${weatherData.country}
-  Temperature: ${weatherData.temp}
-  Low: ${weatherData.minTemp} High: ${weatherData.maxTemp}
-  ${weatherData.description}`;
+  function getData(city) {
+    const data = fetchWeather(city).then((response) => parseWeather(response));
+    return data;
+  }
+
+  setDisplay(await getData("London"));
+
+  function setDisplay(data) {
+    display.innerHTML = `${data.city}, ${data.country}
+    Temperature: ${data.temp}
+    Low: ${data.minTemp} High: ${data.maxTemp}
+    ${data.description}`;
+  }
 })();
