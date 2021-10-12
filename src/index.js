@@ -9,9 +9,15 @@ async function fetchWeather(location = "London") {
 
   try {
     const response = await fetch(baseUrl);
-    const weatherData = await response.json();
-    console.log(weatherData);
-    return weatherData;
+    const dayWeather = await response.json();
+    const { lat, lon } = dayWeather.coord;
+
+    const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=f2770452bcb842b20425a6d7a6413b9e`;
+
+    const secondRes = await fetch(url);
+    const weekWeather = await secondRes.json();
+    console.log(dayWeather, weekWeather);
+    return { dayWeather, weekWeather };
   } catch (err) {
     console.log(err);
   }
@@ -26,6 +32,7 @@ function parseWeather(data) {
   const maxTemp = data.main.temp_max;
   const minTemp = data.main.temp_min;
   const description = data.weather[0].description;
+
   return { city, country, temp, maxTemp, minTemp, description };
 }
 
@@ -40,7 +47,9 @@ function parseWeather(data) {
   });
 
   function getData(city) {
-    const data = fetchWeather(city).then((response) => parseWeather(response));
+    const data = fetchWeather(city).then((response) =>
+      parseWeather(response.dayWeather)
+    );
     return data;
   }
 
