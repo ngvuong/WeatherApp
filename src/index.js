@@ -76,7 +76,7 @@ function parseWeather(data) {
 
     dayDisplay.innerHTML = `<div>${data.city}, ${data.country}</div>
     <div class="main-temp">${data.temp}°</div>
-    Low: ${data.minTemp}° High: ${data.maxTemp}°
+    Today's low is ${data.minTemp}° and high is ${data.maxTemp}° with
     ${data.description}`;
 
     weekDisplay.textContent = "";
