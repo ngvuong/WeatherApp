@@ -1,0 +1,26 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.search {
+  width: max-content;
+  margin: auto;
+}
+
+.day-display {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.main-temp {
+  font-size: 5vw;
+}
+
+.week-display {
+  display: flex;
+  justify-content: center;
+}
