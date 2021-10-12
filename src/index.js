@@ -1,3 +1,7 @@
+import { windDirection } from "./windDir";
+
+console.log(windDirection(256));
+
 async function fetchWeather(location = "London") {
   const city = location || "London";
 
@@ -9,7 +13,7 @@ async function fetchWeather(location = "London") {
   return weatherData;
 }
 
-// fetchWeather("Vancouver");
+fetchWeather("San Francisco, CA, US");
 
 function parseWeather(data) {
   const city = data.name;
