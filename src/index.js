@@ -27,18 +27,30 @@ async function fetchWeather(city = "London") {
 function parseWeather(data) {
   const city = data.dayWeather.name;
   const country = data.dayWeather.sys.country;
-  const temp = data.dayWeather.main.temp;
-  const maxTemp = data.dayWeather.main.temp_max;
-  const minTemp = data.dayWeather.main.temp_min;
+  const temp = Math.round(data.dayWeather.main.temp, 0);
+  const maxTemp = Math.round(data.dayWeather.main.temp_max, 0);
+  const minTemp = Math.round(data.dayWeather.main.temp_min, 0);
   const description = data.dayWeather.weather[0].description;
+  const timeZone = data.weekWeather.timezone;
   const forecast = data.weekWeather.daily.reduce((acc, day) => {
-    const obj = { day: format(day.dt * 1000, "EEEE"), temp: day.temp };
-    // obj[format(day.dt * 1000, "yyyy-MM-dd")] = day.temp;
+    const obj = {
+      day: format(day.dt * 1000, "EEEE"),
+      temp: day.temp,
+    };
     acc.push(obj);
     return acc;
   }, []);
 
-  return { city, country, temp, maxTemp, minTemp, description, forecast };
+  return {
+    city,
+    country,
+    temp,
+    maxTemp,
+    minTemp,
+    description,
+    timeZone,
+    forecast,
+  };
 }
 
 (async function displayWeather() {
@@ -62,11 +74,22 @@ function parseWeather(data) {
   function setDisplay(data) {
     console.log(data.forecast);
 
-    dayDisplay.innerHTML = `${data.city}, ${data.country}
-    Temperature: ${data.temp}
-    Low: ${data.minTemp} High: ${data.maxTemp}
+    dayDisplay.innerHTML = `<div>${data.city}, ${data.country}</div>
+    <div class="main-temp">${data.temp}°</div>
+    Low: ${data.minTemp}° High: ${data.maxTemp}°
     ${data.description}`;
 
+    weekDisplay.textContent = "";
     const forecast = data.forecast;
+    forecast.forEach((day) => {
+      const card = document.createElement("div");
+      card.innerHTML = `<div>${day.day}</div> 
+      <div>${Math.round(day.temp.day, 0)}°</div>
+      <div>Low ${Math.round(day.temp.min, 0)}° High ${Math.round(
+        day.temp.max,
+        0
+      )}°</div>`;
+      weekDisplay.appendChild(card);
+    });
   }
 })();
