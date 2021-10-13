@@ -1,7 +1,7 @@
 import { windDirection } from "./windDir";
 import { format } from "date-fns";
 
-// console.log(windDirection(309));
+// console.log(windDirection(355));
 
 async function fetchWeather(city = "London") {
   const baseUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=f2770452bcb842b20425a6d7a6413b9e`;
@@ -22,14 +22,12 @@ async function fetchWeather(city = "London") {
   }
 }
 
-// fetchWeather("Santa Rosa, US");
-
 function parseWeather(data) {
   const city = data.dayWeather.name;
   const country = data.dayWeather.sys.country;
-  const temp = Math.round(data.dayWeather.main.temp, 0);
-  const maxTemp = Math.round(data.dayWeather.main.temp_max, 0);
-  const minTemp = Math.round(data.dayWeather.main.temp_min, 0);
+  const temp = Math.round(data.dayWeather.main.temp);
+  const maxTemp = Math.round(data.dayWeather.main.temp_max);
+  const minTemp = Math.round(data.dayWeather.main.temp_min);
   const description = data.dayWeather.weather[0].description;
   const timeZone = data.weekWeather.timezone;
   const forecast = data.weekWeather.daily.reduce((acc, day) => {
@@ -62,6 +60,7 @@ function parseWeather(data) {
     e.preventDefault();
     const city = search.city.value;
     setDisplay(await getData(city));
+    search.reset();
   });
 
   function getData(city) {
@@ -84,10 +83,9 @@ function parseWeather(data) {
     forecast.forEach((day) => {
       const card = document.createElement("div");
       card.innerHTML = `<div>${day.day}</div> 
-      <div>${Math.round(day.temp.day, 0)}°</div>
-      <div>Low ${Math.round(day.temp.min, 0)}° High ${Math.round(
-        day.temp.max,
-        0
+      <div>${Math.round(day.temp.day)}°</div>
+      <div>Low ${Math.round(day.temp.min)}° High ${Math.round(
+        day.temp.max
       )}°</div>`;
       weekDisplay.appendChild(card);
     });

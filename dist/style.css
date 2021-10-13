@@ -6,14 +6,21 @@
 
 body {
   margin: 0;
-  background: url("./assets/night-sky.jpeg") no-repeat;
-  background-size: cover;
-  color: white;
+  height: 100vh;
+  color: #e8e6e3;
   font-size: clamp(1rem, 1vw, 2rem);
+  /* background: #333; */
+
+  background: linear-gradient(to bottom, #3c95e7 1%, #c4d7e7 100%);
+  /* background: linear-gradient(to bottom, #333, #5c646b); */
+  /* background: url("./assets/night-sky.jpeg") no-repeat;
+  background-size: cover; */
 }
 
 .head {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .title {
@@ -27,6 +34,8 @@ body {
 
 #search-box {
   width: 30vw;
+  height: 4vh;
+  background-color: #303436;
 }
 
 .day-display {
