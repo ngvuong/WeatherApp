@@ -8,7 +8,7 @@ body {
   margin: 0;
   height: 100vh;
   color: #e8e6e3;
-  font-size: clamp(1rem, 1vw, 2rem);
+  font-size: clamp(1.2rem, 2vw, 2rem);
   /* background: #333; */
 
   background: linear-gradient(to bottom, #3c95e7 1%, #c4d7e7 100%);
@@ -31,6 +31,11 @@ body {
   width: max-content;
   margin-left: 10%;
   border: 5px double #fff;
+}
+
+.search button {
+  background: none;
+  border: none;
 }
 
 #search-box,
@@ -63,11 +68,20 @@ body {
 
 .day-display.loading span:not(:first-child) {
   visibility: hidden;
-  animation: loading 0.2s ease-in-out 0 infinite;
+  animation: loading 1s ease-in-out infinite;
+}
+
+.day-display.loading span:nth-child(2) {
+  animation-delay: -0.2s;
+  /* animation-fill-mode: forwards; */
+}
+
+.day-display.loading span:nth-child(3) {
+  animation-delay: -0.1s;
 }
 
 @keyframes loading {
-  99% {
+  50% {
     visibility: hidden;
   }
 
@@ -76,17 +90,12 @@ body {
   }
 }
 
-.day-display.loading span.load:nth-child(2) {
-  visibility: visible;
-}
-
-.day-display.loading span.load:nth-child(3) {
-  visibility: visible;
-  transition: all 0.4s ease-in-out;
+.main-temp *:first-child {
+  margin-right: 1vw;
 }
 
 .main-temp *:nth-child(2) {
-  font-size: 5vw;
+  font-size: clamp(2rem, 5vw, 5rem);
 }
 
 .description {
@@ -109,4 +118,17 @@ body {
 
 .forecast *:nth-child(2) {
   font-size: 1.5rem;
+}
+
+.current-forecast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 30vw;
+  height: 30vh;
+  background: url("./assets/sun.svg") no-repeat;
+  background-size: 100% 100%;
+  white-space: nowrap;
+  ]
 }

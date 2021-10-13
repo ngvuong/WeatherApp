@@ -70,8 +70,9 @@ function parseWeather(data) {
   });
 
   function loadData(city) {
-    // dayDisplay.textContent = "...";
     dayDisplay.classList.add("loading");
+    dayDisplay.innerHTML = `<span>.</span><span>.</span><span>.</span>`;
+    weekDisplay.textContent = "";
     const data = fetchWeather(city).then((response) => parseWeather(response));
     return data;
   }
@@ -83,10 +84,12 @@ function parseWeather(data) {
 
     dayDisplay.classList.remove("loading");
 
-    dayDisplay.innerHTML = `<div>${data.city}, ${data.country}</div>
-    <span class="description">${data.description}</span>
-    <div class="main-temp"><span>${data.minTemp}°  </span> <span>${data.temp}°</span> <span>${data.maxTemp}°</span></div>
-    ${data.windSpeed} m/h ${data.windDirection} wind
+    dayDisplay.innerHTML = `<div class="current-forecast">
+      <div>${data.city}, ${data.country}</div>
+      <span class="description">${data.description}</span>
+      <div class="main-temp"><span>${data.minTemp}°  </span> <span>${data.temp}°</span> <span>${data.maxTemp}°</span></div>
+      ${data.windSpeed} m/h ${data.windDirection} wind
+    </div>
     `;
 
     weekDisplay.textContent = "";
