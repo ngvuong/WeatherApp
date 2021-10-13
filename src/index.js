@@ -87,10 +87,16 @@ function parseWeather(data) {
     dayDisplay.innerHTML = `<div class="current-forecast">
       <div>${data.city}, ${data.country}</div>
       <span class="description">${data.description}</span>
-      <div class="main-temp"><span>${data.minTemp}°  </span> <span>${data.temp}°</span> <span>${data.maxTemp}°</span></div>
+      <div class="main-temp"><span>${data.minTemp}°</span> <span>${data.temp}°</span> <span>${data.maxTemp}°</span></div>
       ${data.windSpeed} m/h ${data.windDirection} wind
     </div>
     `;
+    const currentForecast = dayDisplay.querySelector(".current-forecast");
+    if (data.description.includes("cloud")) {
+      currentForecast.classList.add("cloud");
+    } else if (data.description.includes("rain")) {
+      currentForecast.classList.add("rain");
+    }
 
     weekDisplay.textContent = "";
     const forecast = data.forecast;
@@ -99,9 +105,9 @@ function parseWeather(data) {
       card.className = "forecast";
       card.innerHTML = `<div>${day.day}</div> 
       <div>${Math.round(day.temp.day)}°</div>
-      <div>L: ${Math.round(day.temp.min)}° H: ${Math.round(
-        day.temp.max
-      )}°</div>`;
+      <div class="min-max"><span>L: ${Math.round(
+        day.temp.min
+      )}°</span> <span>H: ${Math.round(day.temp.max)}°</span></div>`;
       weekDisplay.appendChild(card);
     });
   }
