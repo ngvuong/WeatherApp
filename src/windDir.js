@@ -1,4 +1,4 @@
-export function windDirection(d) {
+export function windDegToDirection(d) {
   d = d % 360;
 
   if (11.25 <= d && d < 33.75) {

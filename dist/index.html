@@ -9,15 +9,26 @@
   </head>
   <body>
     <header class="head">
-      <span class="title">Weatherly</span>
+      <div class="title">
+        Weatherly <span class="units fahrenheit">°F</span> /
+        <span class="units celsius">°C</span>
+      </div>
       <form class="search">
-        <input type="text" placeholder="City" id="search-box" name="city" />
+        <input
+          type="text"
+          placeholder="City"
+          id="search-box"
+          name="city"
+          autocomplete="on"
+        />
         <button>Search</button>
       </form>
     </header>
 
     <main class="display">
-      <section class="day-display"></section>
+      <section class="loading day-display">
+        <span>.</span><span>.</span><span>.</span>
+      </section>
       <section class="week-display"></section>
     </main>
 

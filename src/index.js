@@ -1,7 +1,5 @@
-import { windDirection } from "./windDir";
+import { windDegToDirection } from "./windDir";
 import { format } from "date-fns";
-
-// console.log(windDirection(355));
 
 async function fetchWeather(city = "London") {
   const baseUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=f2770452bcb842b20425a6d7a6413b9e`;
@@ -29,7 +27,9 @@ function parseWeather(data) {
   const maxTemp = Math.round(data.dayWeather.main.temp_max);
   const minTemp = Math.round(data.dayWeather.main.temp_min);
   const description = data.dayWeather.weather[0].description;
-  const timeZone = data.weekWeather.timezone;
+  const windSpeed = data.dayWeather.wind.speed;
+  const windDeg = data.dayWeather.wind.deg;
+  const windDirection = windDegToDirection(windDeg);
 
   const today = format(new Date(), "MMM-d");
   const forecast = data.weekWeather.daily.reduce((acc, day) => {
@@ -51,7 +51,8 @@ function parseWeather(data) {
     maxTemp,
     minTemp,
     description,
-    timeZone,
+    windSpeed,
+    windDirection,
     forecast,
   };
 }
@@ -64,24 +65,29 @@ function parseWeather(data) {
   search.addEventListener("submit", async (e) => {
     e.preventDefault();
     const city = search.city.value;
-    setDisplay(await getData(city));
+    setDisplay(await loadData(city));
     search.reset();
   });
 
-  function getData(city) {
+  function loadData(city) {
+    // dayDisplay.textContent = "...";
+    dayDisplay.classList.add("loading");
     const data = fetchWeather(city).then((response) => parseWeather(response));
     return data;
   }
 
-  setDisplay(await getData("London"));
+  setDisplay(await loadData("London"));
 
   function setDisplay(data) {
     console.log(data.forecast);
 
+    dayDisplay.classList.remove("loading");
+
     dayDisplay.innerHTML = `<div>${data.city}, ${data.country}</div>
-    <div class="main-temp">${data.temp}°</div>
-    Today's low is ${data.minTemp}° and high is ${data.maxTemp}° with
-    ${data.description}`;
+    <span class="description">${data.description}</span>
+    <div class="main-temp"><span>${data.minTemp}°  </span> <span>${data.temp}°</span> <span>${data.maxTemp}°</span></div>
+    ${data.windSpeed} m/h ${data.windDirection} wind
+    `;
 
     weekDisplay.textContent = "";
     const forecast = data.forecast;
@@ -90,7 +96,7 @@ function parseWeather(data) {
       card.className = "forecast";
       card.innerHTML = `<div>${day.day}</div> 
       <div>${Math.round(day.temp.day)}°</div>
-      <div>L: ${Math.round(day.temp.min)}° High ${Math.round(
+      <div>L: ${Math.round(day.temp.min)}° H: ${Math.round(
         day.temp.max
       )}°</div>`;
       weekDisplay.appendChild(card);
