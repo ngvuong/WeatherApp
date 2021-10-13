@@ -30,12 +30,21 @@ body {
 .search {
   width: max-content;
   margin-left: 10%;
+  border: 5px double #fff;
 }
 
-#search-box {
+#search-box,
+#search-box:focus-visible {
   width: 30vw;
   height: 4vh;
-  background-color: #303436;
+  color: #e8e6e3;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+::placeholder {
+  color: #e8e6e3;
 }
 
 .day-display {
@@ -53,4 +62,15 @@ body {
   display: flex;
   justify-content: center;
   overflow: auto;
+}
+
+.forecast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.forecast *:nth-child(2) {
+  font-size: 1.5rem;
 }

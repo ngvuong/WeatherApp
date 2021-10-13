@@ -30,12 +30,17 @@ function parseWeather(data) {
   const minTemp = Math.round(data.dayWeather.main.temp_min);
   const description = data.dayWeather.weather[0].description;
   const timeZone = data.weekWeather.timezone;
+
+  const today = format(new Date(), "MMM-d");
   const forecast = data.weekWeather.daily.reduce((acc, day) => {
-    const obj = {
-      day: format(day.dt * 1000, "EEEE"),
-      temp: day.temp,
-    };
-    acc.push(obj);
+    const targetDay = format(day.dt * 1000, "MMM-d");
+    if (targetDay !== today && acc.length < 7) {
+      const obj = {
+        day: format(day.dt * 1000, "EEEE"),
+        temp: day.temp,
+      };
+      acc.push(obj);
+    }
     return acc;
   }, []);
 
@@ -82,9 +87,10 @@ function parseWeather(data) {
     const forecast = data.forecast;
     forecast.forEach((day) => {
       const card = document.createElement("div");
+      card.className = "forecast";
       card.innerHTML = `<div>${day.day}</div> 
       <div>${Math.round(day.temp.day)}°</div>
-      <div>Low ${Math.round(day.temp.min)}° High ${Math.round(
+      <div>L: ${Math.round(day.temp.min)}° High ${Math.round(
         day.temp.max
       )}°</div>`;
       weekDisplay.appendChild(card);
