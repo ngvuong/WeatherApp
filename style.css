@@ -21,16 +21,27 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
 }
 
 .title {
-  font-size: 5vw;
+  font-size: clamp(3rem, 5vw, 10rem);
+}
+
+.wrapper {
+  white-space: nowrap;
+}
+
+.units {
+  font-size: clamp(1rem, 3vw, 3rem);
 }
 
 .search {
   width: max-content;
   margin-left: 10%;
   border: 5px double #fff;
+  white-space: nowrap;
 }
 
 .search button {
@@ -105,6 +116,7 @@ body {
 .week-display {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 1vw;
   overflow: auto;
 }
@@ -116,8 +128,18 @@ body {
   gap: 0.5rem;
 }
 
-.forecast *:nth-child(2) {
+.forecast div:nth-child(2) {
   font-size: 1.5rem;
+}
+
+.min-max {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.forecast span {
+  white-space: nowrap;
 }
 
 .current-forecast {
@@ -125,10 +147,30 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 30vw;
+  width: 40vw;
   height: 30vh;
   background: url("./assets/sun.svg") no-repeat;
   background-size: 100% 100%;
   white-space: nowrap;
-  ]
+}
+
+.current-forecast.cloud {
+  background: url("./assets/cloud.svg") no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+.current-forecast.rain {
+  background: url("./assets/rain.svg") no-repeat;
+  background-size: 100% 100%;
+}
+
+@media screen and (max-width: 500px) {
+  .week-display {
+    flex-direction: column;
+  }
+
+  .forecast {
+    flex-direction: row;
+  }
 }
