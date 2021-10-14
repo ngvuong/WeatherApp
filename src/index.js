@@ -6,18 +6,18 @@ async function fetchWeather(city = "London") {
   const baseUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=f2770452bcb842b20425a6d7a6413b9e`;
 
   try {
+    // First API request - weather for the day
     const response = await fetch(baseUrl);
     const dayWeather = await response.json();
     const { lat, lon } = dayWeather.coord;
-
+    // Use lat, lon to make second request - 7 day forecast
     const url = `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=f2770452bcb842b20425a6d7a6413b9e`;
 
     const secondRes = await fetch(url);
     const weekWeather = await secondRes.json();
-    console.log(dayWeather, weekWeather);
     return { dayWeather, weekWeather };
   } catch (err) {
-    console.log(err);
+    return err;
   }
 }
 
@@ -32,6 +32,7 @@ function parseWeather(data) {
   const windDeg = data.dayWeather.wind.deg;
   const windDirection = windDegToDirection(windDeg);
 
+  // Parse 7 day data for ease of access
   const today = format(new Date(), "MMM-d");
   const forecast = data.weekWeather.daily.reduce((acc, day) => {
     const targetDay = format(day.dt * 1000, "MMM-d");
@@ -62,16 +63,25 @@ function parseWeather(data) {
   const dayDisplay = document.querySelector(".day-display");
   const weekDisplay = document.querySelector(".week-display");
   const search = document.querySelector(".search");
-  const weatherData = await loadData("London");
+  // Save initial request data
+  let weatherData = await loadData("London");
 
   search.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const city = search.city.value || "London";
-    weatherData = await loadData(city);
-    setDisplay(weatherData);
+    const city = search.city.value;
+    // Handle search not found
+    try {
+      if (city) {
+        weatherData = await loadData(city);
+        setDisplay(weatherData);
+      }
+    } catch (e) {
+      dayDisplay.textContent = "Location not found, please try again";
+    }
     search.reset();
   });
 
+  // Facilitate fetching and parsing forecast data
   function loadData(city) {
     dayDisplay.classList.add("loading");
     dayDisplay.innerHTML = `<span>.</span><span>.</span><span>.</span>`;
@@ -80,21 +90,27 @@ function parseWeather(data) {
     return data;
   }
 
+  // Handle units preference toggling
   let units = "imperial";
   const fahrenheit = document.querySelector(".fahrenheit");
   const celsius = document.querySelector(".celsius");
+
   fahrenheit.addEventListener("click", () => {
     units = "imperial";
     setDisplay(weatherData);
+    document.querySelector(".current").classList.remove("current");
+    fahrenheit.classList.add("current");
   });
+
   celsius.addEventListener("click", () => {
     units = "metric";
     setDisplay(weatherData);
+    document.querySelector(".current").classList.remove("current");
+    celsius.classList.add("current");
   });
 
+  // Set DOM display
   function setDisplay(data) {
-    console.log(data.forecast);
-
     dayDisplay.classList.remove("loading");
 
     dayDisplay.innerHTML = `<div class="current-forecast">
@@ -132,5 +148,5 @@ function parseWeather(data) {
     });
   }
 
-  setDisplay(await loadData("London"));
+  setDisplay(weatherData);
 })();
