@@ -1,4 +1,5 @@
 import { windDegToDirection } from "./windDir";
+import { convert } from "./conversion";
 import { format } from "date-fns";
 
 async function fetchWeather(city = "London") {
@@ -23,9 +24,9 @@ async function fetchWeather(city = "London") {
 function parseWeather(data) {
   const city = data.dayWeather.name;
   const country = data.dayWeather.sys.country;
-  const temp = Math.round(data.dayWeather.main.temp);
-  const maxTemp = Math.round(data.dayWeather.main.temp_max);
-  const minTemp = Math.round(data.dayWeather.main.temp_min);
+  const temp = data.dayWeather.main.temp;
+  const maxTemp = data.dayWeather.main.temp_max;
+  const minTemp = data.dayWeather.main.temp_min;
   const description = data.dayWeather.weather[0].description;
   const windSpeed = data.dayWeather.wind.speed;
   const windDeg = data.dayWeather.wind.deg;
@@ -61,11 +62,13 @@ function parseWeather(data) {
   const dayDisplay = document.querySelector(".day-display");
   const weekDisplay = document.querySelector(".week-display");
   const search = document.querySelector(".search");
+  const weatherData = await loadData("London");
 
   search.addEventListener("submit", async (e) => {
     e.preventDefault();
     const city = search.city.value || "London";
-    setDisplay(await loadData(city));
+    weatherData = await loadData(city);
+    setDisplay(weatherData);
     search.reset();
   });
 
@@ -77,7 +80,17 @@ function parseWeather(data) {
     return data;
   }
 
-  setDisplay(await loadData("London"));
+  let units = "imperial";
+  const fahrenheit = document.querySelector(".fahrenheit");
+  const celsius = document.querySelector(".celsius");
+  fahrenheit.addEventListener("click", () => {
+    units = "imperial";
+    setDisplay(weatherData);
+  });
+  celsius.addEventListener("click", () => {
+    units = "metric";
+    setDisplay(weatherData);
+  });
 
   function setDisplay(data) {
     console.log(data.forecast);
@@ -87,7 +100,13 @@ function parseWeather(data) {
     dayDisplay.innerHTML = `<div class="current-forecast">
       <div>${data.city}, ${data.country}</div>
       <span class="description">${data.description}</span>
-      <div class="main-temp"><span>${data.minTemp}°</span> <span>${data.temp}°</span> <span>${data.maxTemp}°</span></div>
+      <div class="main-temp"><span>${convert(
+        data.minTemp,
+        units
+      )}°</span> <span>${convert(data.temp, units)}°</span> <span>${convert(
+      data.maxTemp,
+      units
+    )}°</span></div>
       ${data.windSpeed} m/h ${data.windDirection} wind
     </div>
     `;
@@ -104,11 +123,14 @@ function parseWeather(data) {
       const card = document.createElement("div");
       card.className = "forecast";
       card.innerHTML = `<div>${day.day}</div> 
-      <div>${Math.round(day.temp.day)}°</div>
-      <div class="min-max"><span>L:${Math.round(
-        day.temp.min
-      )}° </span><span>H:${Math.round(day.temp.max)}°</span></div>`;
+      <div>${convert(day.temp.day, units)}°</div>
+      <div class="min-max"><span>L:${convert(
+        day.temp.min,
+        units
+      )}° </span><span>H:${convert(day.temp.max, units)}°</span></div>`;
       weekDisplay.appendChild(card);
     });
   }
+
+  setDisplay(await loadData("London"));
 })();
