@@ -5,14 +5,13 @@
 }
 
 body {
-  margin: 0;
   height: 100vh;
   color: #e8e6e3;
   font-size: clamp(1.2rem, 2vw, 2rem);
-  /* background: #333; */
+  font-family: "Ubuntu", sans-serif;
   background: linear-gradient(to bottom, #3c95e7 1%, #c4d7e7 100%);
   background-attachment: fixed;
-  /* background: linear-gradient(to bottom, #333, #5c646b); */
+  margin: 0;
 }
 
 .head {
@@ -88,7 +87,6 @@ body {
 
 .day-display.loading span:nth-child(2) {
   animation-delay: -0.2s;
-  /* animation-fill-mode: forwards; */
 }
 
 .day-display.loading span:nth-child(3) {
@@ -120,7 +118,6 @@ body {
 .week-display {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 1vw;
   overflow: auto;
 }
@@ -140,8 +137,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0;
-  /* flex-wrap: wrap; */
 }
 
 .forecast span {
@@ -168,16 +163,16 @@ body {
   background-size: 100% 100%;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 540px) {
   .week-display {
     flex-direction: column;
+    gap: 5vw;
   }
 
   .forecast {
-    flex-direction: row;
-    gap: 5vw;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    gap: 5vw;
     margin: 0 1rem 0 1rem;
   }
 
