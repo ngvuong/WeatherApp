@@ -10,8 +10,9 @@ body {
   color: #e8e6e3;
   font-size: clamp(1.2rem, 2vw, 2rem);
   /* background: #333; */
-
   background: linear-gradient(to bottom, #3c95e7 1%, #c4d7e7 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   /* background: linear-gradient(to bottom, #333, #5c646b); */
   /* background: url("./assets/night-sky.jpeg") no-repeat;
   background-size: cover; */
@@ -35,6 +36,12 @@ body {
 
 .units {
   font-size: clamp(1rem, 3vw, 3rem);
+  cursor: pointer;
+}
+
+.units.current {
+  /* text-decoration: underline; */
+  border-bottom: 1px ridge #fff;
 }
 
 .search {
@@ -47,12 +54,13 @@ body {
 .search button {
   background: none;
   border: none;
+  cursor: pointer;
 }
 
 #search-box,
 #search-box:focus-visible {
   width: 30vw;
-  height: 4vh;
+  font-size: clamp(1rem, 2vw, 1.5rem);
   color: #e8e6e3;
   background: none;
   border: none;
@@ -134,8 +142,10 @@ body {
 
 .min-max {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  flex-wrap: wrap;
+  gap: 0;
+  /* flex-wrap: wrap; */
 }
 
 .forecast span {
@@ -147,8 +157,6 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 40vw;
-  height: 30vh;
   background: url("./assets/sun.svg") no-repeat;
   background-size: 100% 100%;
   white-space: nowrap;
@@ -157,7 +165,6 @@ body {
 .current-forecast.cloud {
   background: url("./assets/cloud.svg") no-repeat;
   background-size: 100% 100%;
-  background-position: center;
 }
 
 .current-forecast.rain {
@@ -171,6 +178,14 @@ body {
   }
 
   .forecast {
+    flex-direction: row;
+    gap: 5vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 0 1rem 0 1rem;
+  }
+
+  .min-max {
     flex-direction: row;
   }
 }
