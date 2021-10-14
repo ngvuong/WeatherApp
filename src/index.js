@@ -64,7 +64,7 @@ function parseWeather(data) {
 
   search.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const city = search.city.value;
+    const city = search.city.value || "London";
     setDisplay(await loadData(city));
     search.reset();
   });
@@ -105,9 +105,9 @@ function parseWeather(data) {
       card.className = "forecast";
       card.innerHTML = `<div>${day.day}</div> 
       <div>${Math.round(day.temp.day)}°</div>
-      <div class="min-max"><span>L: ${Math.round(
+      <div class="min-max"><span>L:${Math.round(
         day.temp.min
-      )}°</span> <span>H: ${Math.round(day.temp.max)}°</span></div>`;
+      )}° </span><span>H:${Math.round(day.temp.max)}°</span></div>`;
       weekDisplay.appendChild(card);
     });
   }
