@@ -11,11 +11,8 @@ body {
   font-size: clamp(1.2rem, 2vw, 2rem);
   /* background: #333; */
   background: linear-gradient(to bottom, #3c95e7 1%, #c4d7e7 100%);
-  background-repeat: no-repeat;
   background-attachment: fixed;
   /* background: linear-gradient(to bottom, #333, #5c646b); */
-  /* background: url("./assets/night-sky.jpeg") no-repeat;
-  background-size: cover; */
 }
 
 .head {
@@ -40,8 +37,7 @@ body {
 }
 
 .units.current {
-  /* text-decoration: underline; */
-  border-bottom: 1px ridge #fff;
+  border-bottom: 1px solid #fff;
 }
 
 .search {
